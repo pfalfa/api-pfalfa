@@ -17,6 +17,7 @@ const config = require('./config')
 const routes = require('./routes')
 const app = express().set('port', config.app.port)
 
+/** config dynamo db */
 AWS.config.update(config.db)
 
 /** express server */
@@ -26,7 +27,7 @@ app.use(bodyParser.json({ limit: '30mb', extended: false }))
 app.use(helmet())
 app.use(compression())
 app.use(logger('dev'))
-app.use(session({ secret: 'blessedecoliving', resave: false, saveUninitialized: true, cookie: { maxAge: 60000 } }))
+app.use(session({ secret: config.app.sessionSecret, resave: false, saveUninitialized: true, cookie: { maxAge: 60000 } }))
 
 /** router */
 routes(app)
