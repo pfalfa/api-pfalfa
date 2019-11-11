@@ -5,10 +5,11 @@ const Schema = dynamoose.Schema
 const dappsSchema = new Schema(
   {
     id: { type: String, hashKey: true, default: uuidv1() },
-    domain: { type: String, required: true, lowercase: true },
+    host_name: { type: String, required: true, lowercase: true },
+    domain_name: { type: String, required: true, lowercase: true },
     port: { type: Number },
     pubkey: { type: String, required: true },
-    hash: { type: String, required: true },
+    container_id: { type: String, required: true },
     status: { type: String, enum: ['Active', 'Disable'] },
     expires: { type: Date },
   },
