@@ -1,3 +1,3 @@
-const dynDb = require('./dynDb')
+const authorization = require('./auth')
 
-module.exports = { dynDb }
+module.exports = { authorization }

@@ -15,6 +15,9 @@ $ sudo nano .env
 REGION='change your region in aws'
 ACCESS_KEY_ID='change your access key id'
 SECRET_ACCESS_KEY='change your secret access key'
+
+# API IDENTITY HUB
+HOST_IHUB='http://host-identity-hub-api:3003/api'
 ```
 
 ## Usage

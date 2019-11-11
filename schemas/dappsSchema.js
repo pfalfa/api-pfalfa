@@ -4,7 +4,7 @@ const dynamoose = require('dynamoose')
 const Schema = dynamoose.Schema
 const dappsSchema = new Schema(
   {
-    id: { type: String, required: true, default: uuidv1() },
+    id: { type: String, hashKey: true, default: uuidv1() },
     domain: { type: String, required: true, lowercase: true },
     port: { type: Number },
     pubkey: { type: String, required: true },
@@ -15,6 +15,7 @@ const dappsSchema = new Schema(
   {
     throughput: 5,
     timestamps: true,
+    useDocumentTypes: true,
   }
 )
 
