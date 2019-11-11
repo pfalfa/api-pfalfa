@@ -14,8 +14,7 @@ module.exports = {
     pageLimit: 10,
   },
   db: {
-    region: 'ap-southeast-1',
-    tableName: process.env.TABLE_NAME,
+    region: process.env.REGION,
     accessKeyId: process.env.ACCESS_KEY_ID,
     secretAccessKey: process.env.SECRET_ACCESS_KEY,
   },

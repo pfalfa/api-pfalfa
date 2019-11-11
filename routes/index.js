@@ -7,5 +7,5 @@ const limiter = rateLimit({
 })
 
 module.exports = app => {
-  // app.use(`${config.app.mainRoute}/users`, limiter, require('./users'))
+  app.use(`${config.app.mainRoute}/dapps`, limiter, require('./dapps'))
 }

@@ -3,12 +3,12 @@ const fs = require('fs')
 const os = require('os')
 const cors = require('cors')
 const http = require('http')
-const AWS = require('aws-sdk')
 const https = require('https')
 const logger = require('morgan')
 const helmet = require('helmet')
 const cluster = require('cluster')
 const express = require('express')
+const dynamoose = require('dynamoose')
 const bodyParser = require('body-parser')
 const compression = require('compression')
 const session = require('express-session')
@@ -18,7 +18,12 @@ const routes = require('./routes')
 const app = express().set('port', config.app.port)
 
 /** config dynamo db */
-AWS.config.update(config.db)
+dynamoose.AWS.config.update(config.db)
+dynamoose.setDefaults({
+  create: process.env.NODE_ENV === 'development' ? true : false,
+  prefix: process.env.NODE_ENV === 'development' ? 'test-' : '',
+  suffix: '',
+})
 
 /** express server */
 app.use(cors())
