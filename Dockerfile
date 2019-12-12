@@ -6,10 +6,17 @@
 
 FROM node:10
 
-WORKDIR /usr/src/app
+# setting the work directory
+WORKDIR /app
+
+# copy sources
 COPY . .
 
+# install dependencies
 RUN npm install
 
+# expose port
 EXPOSE 3033
-CMD ["npm", "run", "start"]
+
+# execute
+CMD [ "node", "index.js" ]
