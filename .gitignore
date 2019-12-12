@@ -21,6 +21,7 @@ yarn.lock
 # gundb
 /db
 /data
+/radata
 
 # misc
 .DS_Store

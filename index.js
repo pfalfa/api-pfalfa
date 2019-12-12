@@ -18,11 +18,11 @@ const routes = require('./routes')
 const app = express().set('port', config.app.port)
 
 /** config dynamo db */
-dynamoose.AWS.config.update(config.db)
+dynamoose.AWS.config.update(config.dynamodb)
 dynamoose.setDefaults({
   create: process.env.NODE_ENV === 'development' ? true : false,
-  prefix: process.env.NODE_ENV === 'development' ? 'test-' : '',
-  suffix: '',
+  prefix: process.env.NODE_ENV === 'development' ? 'pfalfa-' : '',
+  suffix: process.env.NODE_ENV === 'development' ? '-test' : '',
 })
 
 /** express server */
