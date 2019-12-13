@@ -20,9 +20,9 @@ const app = express().set('port', config.app.port)
 /** config dynamo db */
 dynamoose.AWS.config.update(config.dynamodb)
 dynamoose.setDefaults({
-  create: process.env.NODE_ENV === 'development' ? true : false,
-  prefix: process.env.NODE_ENV === 'development' ? 'pfalfa-' : '',
-  suffix: process.env.NODE_ENV === 'development' ? '-test' : '',
+  create: true,
+  prefix: 'pfalfa-',
+  suffix: process.env.NODE_ENV === 'development' ? '-staging' : '-production',
 })
 
 /** express server */
