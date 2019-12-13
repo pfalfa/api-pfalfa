@@ -15,9 +15,9 @@ router.post('/', authorization, (req, res) => {
   dapps.created(req, res)
 })
 
-router.put('/:id', authorization, (req, res) => {
-  dapps.updated(req, res)
-})
+// router.put('/:id', authorization, (req, res) => {
+//   dapps.updated(req, res)
+// })
 
 router.delete('/:id', authorization, (req, res) => {
   dapps.deleted(req, res)
