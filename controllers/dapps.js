@@ -27,6 +27,11 @@ const created = (req, res) => {
       const { status, error_msg, data } = resp
       if (status === 'failed') return res.status(400).json({ success: false, message: error_msg, data: null, paginate: null })
 
+      const dappStatus = data.items[0].status
+      if (dappStatus && dappStatus.conditions && dappStatus.conditions[0].status === 'False') {
+        return res.status(400).json({ success: false, message: dappStatus.conditions[0].message, data: null, paginate: null })
+      }
+
       const { apiVersion, metadata, spec } = data.items[0]
       const item = {
         dappUid: metadata.uid,
@@ -34,8 +39,8 @@ const created = (req, res) => {
         name: metadata.name,
         port: spec.containers[0].ports[0].containerPort,
         pubkey: req.UserAuth.pub,
-        hostIP: data.items[0].status.hostIP,
-        phase: data.items[0].status.phase,
+        hostIP: dappStatus.hostIP,
+        phase: dappStatus.phase,
         apiVersion,
       }
       const dapps = new Dapps(item)
@@ -44,7 +49,9 @@ const created = (req, res) => {
         .then(data => {
           return res.status(201).json({ success: true, message: 'Dapp created successfully', data, paginate: null })
         })
-        .catch(error => console.log(error))
+        .catch(error => {
+          return res.status(500).json({ success: true, message: error.message, data: null, paginate: null })
+        })
     })
     .catch(error => console.error(error))
 }
