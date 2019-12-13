@@ -57,12 +57,12 @@ const created = (req, res) => {
 }
 
 const deleted = (req, res) => {
-  const id = req.params.id
-  if (!id) return res.status(400).json({ success: false, message: 'Invalid payload', data: null, paginate: null })
+  const filter = { id: req.params.id, isDeleted: false }
+  if (!filter.id) return res.status(400).json({ success: false, message: 'Invalid payload', data: null, paginate: null })
 
-  Dapps.scan({ id }, (err, data) => {
+  Dapps.get(filter, (err, data) => {
     if (err) return res.status(500).json({ success: false, message: err, data: null, paginate: null })
-    if (data && data.count < 1) return res.status(400).json({ success: false, message: 'Dapp not found', data: null, paginate: null })
+    if (!data || data.isDeleted) return res.status(400).json({ success: false, message: 'Dapp not found', data: null, paginate: null })
 
     const item = { isDeleted: true }
     Dapps.update({ id }, item, (err, data) => {
