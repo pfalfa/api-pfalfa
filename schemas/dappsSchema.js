@@ -5,13 +5,16 @@ const Schema = dynamoose.Schema
 const dappsSchema = new Schema(
   {
     id: { type: String, hashKey: true, default: uuidv1() },
-    host_name: { type: String, required: true, lowercase: true },
-    domain_name: { type: String, required: true, lowercase: true },
-    port: { type: Number },
+    dappUid: { type: String, required: true },
+    dappCreated: { type: Date, required: true },
+    name: { type: String, required: true },
+    port: { type: Number, required: true },
     pubkey: { type: String, required: true },
-    container_id: { type: String, required: true },
-    status: { type: String, enum: ['Active', 'Disable'] },
-    expires: { type: Date },
+    hostIP: { type: String, required: true },
+    phase: { type: String },
+    apiVersion: { type: String },
+    isDeleted: { type: Boolean, default: false },
+    // isDeleted: { type: String, enum: ['Active', 'Inactive'] },
   },
   {
     throughput: 5,

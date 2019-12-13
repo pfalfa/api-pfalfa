@@ -1,61 +1,75 @@
+const { api } = require('../utils')
 const { Dapps } = require('../models')
 
 const getAll = (req, res) => {
-  const params = {}
-  Dapps.scan(params, (err, data) => {
-    if (err) return res.status(500).json({ status: 500, success: false, message: err, data: null, paginate: null })
-    return res.status(200).json({ success: true, message: 'dApp fetched successfully', data, paginate: null })
+  const filter = { isDeleted: false }
+  Dapps.scan(filter, (err, data) => {
+    if (err) return res.status(500).json({ success: false, message: err, data: null, paginate: null })
+    return res.status(200).json({ success: true, message: 'Dapps fetched successfully', data, paginate: null })
   })
 }
 
 const getById = (req, res) => {
-  Dapps.get({ id: req.params.id }, (err, data) => {
-    if (err) return res.status(500).json({ status: 500, success: false, message: err, data: null, paginate: null })
-    return res.status(200).json({ success: true, message: 'dApp fetched successfully', data, paginate: null })
+  const filter = { id: req.params.id, isDeleted: false }
+  if (!filter.id) return res.status(400).json({ success: false, message: 'Invalid payload', data: null, paginate: null })
+
+  Dapps.get(filter, (err, data) => {
+    if (err) return res.status(500).json({ success: false, message: err, data: null, paginate: null })
+    if (!data || data.isDeleted) return res.status(400).json({ success: false, message: 'Dapp not found', data: null, paginate: null })
+    return res.status(200).json({ success: true, message: 'Dapp fetched successfully', data, paginate: null })
   })
 }
 
 const created = (req, res) => {
-  const { domain_name, host_name, port, container_id, status, expires } = req.body
-  const pubkey = req.UserAuth.pub
-  if (!domain_name || !host_name || !pubkey || !container_id || !status)
-    return res.status(400).json({ success: false, message: 'Invalid payload', data: null, paginate: null })
+  api
+    .post('dapps/create')
+    .then(resp => {
+      const { status, error_msg, data } = resp
+      if (status === 'failed') return res.status(400).json({ success: false, message: error_msg, data: null, paginate: null })
 
-  Dapps.scan({ domain_name }, (err, results) => {
-    if (err) return res.status(500).json({ status: 500, success: false, message: err.message, data: null, paginate: null })
-    if (results.count > 0) return res.status(400).json({ success: false, message: 'Domain already exist', data: null, paginate: null })
-
-    const item = { domain_name, host_name, port: port || null, pubkey, container_id, status, expires: expires || null }
-    const dapps = new Dapps(item)
-    dapps
-      .save()
-      .then(data => {
-        return res.status(201).json({ success: true, message: 'dApp created successfully', data, paginate: null })
-      })
-      .catch(err => {
-        console.error('Dapps Post ', err)
-      })
-  })
-}
-
-const updated = (req, res) => {
-  const { domain_name, host_name, port, container_id, status, expires } = req.body
-  const pubkey = req.UserAuth.pub
-  if (!domain_name || !pubkey || !container_id || !status)
-    return res.status(400).json({ success: false, message: 'Invalid payload', data: null, paginate: null })
-
-  const item = { domain_name, host_name, port: port || null, pubkey, container_id, status, expires: expires || null }
-  Dapps.update({ id: req.params.id }, item, (err, data) => {
-    if (err) return res.status(500).json({ status: 500, success: false, message: err, data: null, paginate: null })
-    return res.status(201).json({ success: true, message: 'dApp updated successfully', data, paginate: null })
-  })
+      const { apiVersion, metadata, spec } = data.items[0]
+      const item = {
+        dappUid: metadata.uid,
+        dappCreated: metadata.creationTimestamp,
+        name: metadata.name,
+        port: spec.containers[0].ports[0].containerPort,
+        pubkey: req.UserAuth.pub,
+        hostIP: data.items[0].status.hostIP,
+        phase: data.items[0].status.phase,
+        apiVersion,
+      }
+      const dapps = new Dapps(item)
+      dapps
+        .save()
+        .then(data => {
+          return res.status(201).json({ success: true, message: 'Dapp created successfully', data, paginate: null })
+        })
+        .catch(error => console.log(error))
+    })
+    .catch(error => console.error(error))
 }
 
 const deleted = (req, res) => {
-  Dapps.delete({ id: req.params.id }, (err, data) => {
-    if (err) return res.status(500).json({ status: 500, success: false, message: err, data: null, paginate: null })
-    return res.status(200).json({ success: true, message: 'dApp deleted successfully', data, paginate: null })
+  const id = req.params.id
+  if (!id) return res.status(400).json({ success: false, message: 'Invalid payload', data: null, paginate: null })
+
+  Dapps.scan({ id }, (err, data) => {
+    if (err) return res.status(500).json({ success: false, message: err, data: null, paginate: null })
+    if (data && data.count < 1) return res.status(400).json({ success: false, message: 'Dapp not found', data: null, paginate: null })
+
+    const item = { isDeleted: true }
+    Dapps.update({ id }, item, (err, data) => {
+      if (err) return res.status(500).json({ status: 500, success: false, message: err, data: null, paginate: null })
+      return res.status(201).json({ success: true, message: 'Dapp deleted successfully', data, paginate: null })
+    })
   })
+
+  // const deleted = (req, res) => {
+  //   Dapps.delete({ id: req.params.id }, (err, data) => {
+  //     if (err) return res.status(500).json({ status: 500, success: false, message: err, data: null, paginate: null })
+  //     return res.status(200).json({ success: true, message: 'dApp deleted successfully', data, paginate: null })
+  //   })
+  // }
 }
 
-module.exports = { getAll, getById, created, updated, deleted }
+module.exports = { getAll, getById, created, deleted }

@@ -1,7 +1,7 @@
 module.exports = {
   app: {
     port: process.env.PORT,
-    host: 'localhost',
+    host: process.env.HOST || 'localhost',
     mainRoute: '/api',
     modeServer: 'http',
     modeCluster: true,

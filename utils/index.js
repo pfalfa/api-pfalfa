@@ -1,3 +1,4 @@
+const api = require('./api')
 const authorization = require('./auth')
 
-module.exports = { authorization }
+module.exports = { api, authorization }
