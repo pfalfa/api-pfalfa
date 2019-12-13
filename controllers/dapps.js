@@ -65,7 +65,7 @@ const deleted = (req, res) => {
     if (!data || data.isDeleted) return res.status(400).json({ success: false, message: 'Dapp not found', data: null, paginate: null })
 
     const item = { isDeleted: true }
-    Dapps.update({ id }, item, (err, data) => {
+    Dapps.update({ id: filter.id }, item, (err, data) => {
       if (err) return res.status(500).json({ status: 500, success: false, message: err, data: null, paginate: null })
       return res.status(201).json({ success: true, message: 'Dapp deleted successfully', data, paginate: null })
     })
