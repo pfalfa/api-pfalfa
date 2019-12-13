@@ -1,6 +1,6 @@
 module.exports = {
   app: {
-    port: process.env.PORT,
+    port: process.env.PORT || 3033,
     host: process.env.HOST || 'localhost',
     mainRoute: '/api',
     modeServer: 'http',
@@ -22,7 +22,7 @@ module.exports = {
     host: 'https://pfalfa-ihub.pfalfa.io/gun',
   },
   api: {
-    ihub: process.env.API_IHUB,
-    dev: process.env.API_DEV,
+    ihub: process.env.API_IHUB || 'http://18.136.211.116:3003/api',
+    dev: process.env.API_DEV || 'http://localhost:8081',
   },
 }
