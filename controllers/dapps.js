@@ -21,8 +21,11 @@ const getById = (req, res) => {
 }
 
 const created = (req, res) => {
+  const { pod_name, category, description } = req.body
+  if (!pod_name || !category) return res.status(400).json({ success: false, message: 'Invalid payload', data: null, paginate: null })
+
   api
-    .post('dapps/create')
+    .post('dapps/create', { pod_name, port: 80 })
     .then(resp => {
       const { status, error_msg, data } = resp
       if (status === 'failed') return res.status(400).json({ success: false, message: error_msg, data: null, paginate: null })
@@ -41,7 +44,9 @@ const created = (req, res) => {
         pubkey: req.UserAuth.pub,
         hostIP: dappStatus.hostIP,
         phase: dappStatus.phase,
+        category,
         apiVersion,
+        description,
       }
       const dapps = new Dapps(item)
       dapps
@@ -53,7 +58,9 @@ const created = (req, res) => {
           return res.status(500).json({ success: true, message: error.message, data: null, paginate: null })
         })
     })
-    .catch(error => console.error(error))
+    .catch(error => {
+      return res.status(500).json({ success: true, message: error.message, data: null, paginate: null })
+    })
 }
 
 const deleted = (req, res) => {
