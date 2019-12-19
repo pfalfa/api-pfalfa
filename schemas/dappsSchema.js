@@ -10,12 +10,15 @@ const dappsSchema = new Schema(
     name: { type: String, required: true },
     port: { type: Number, required: true },
     pubkey: { type: String, required: true },
-    hostIP: { type: String, required: true },
+    IpPublic: { type: String, required: true },
+    IpLocal: { type: String, required: true },
     category: { type: String },
     phase: { type: String },
     apiVersion: { type: String },
     description: { type: String },
+    info: { type: Object },
     isDeleted: { type: Boolean, default: false },
+
     // isDeleted: { type: String, enum: ['Active', 'Inactive'] },
   },
   {
