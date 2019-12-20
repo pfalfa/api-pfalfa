@@ -2,7 +2,7 @@ const { api } = require('../utils')
 const { Dapps } = require('../models')
 
 const getAll = (req, res) => {
-  const filter = { isDeleted: false }
+  const filter = { isDeleted: false, pubkey: req.UserAuth.pub }
   Dapps.scan(filter, (err, data) => {
     if (err) return res.status(500).json({ success: false, message: err, data: null, paginate: null })
     return res.status(200).json({ success: true, message: 'Dapps fetched successfully', data, paginate: null })
