@@ -21,7 +21,7 @@ const getById = (req, res) => {
 }
 
 const created = (req, res) => {
-  const { pod_name, category, description } = req.body
+  const { logo_url, pod_name, category, description } = req.body
   if (!pod_name || !category) return res.status(400).json({ success: false, message: 'Invalid payload', data: null, paginate: null })
 
   api
@@ -39,6 +39,8 @@ const created = (req, res) => {
       const item = {
         dappUid: metadata.uid,
         dappCreated: metadata.creationTimestamp,
+        dappDetail: data.items[0],
+        logoUrl: logo_url || null,
         name: metadata.name,
         port: spec.containers[0].ports[0].containerPort,
         pubkey: req.UserAuth.pub,
@@ -64,6 +66,22 @@ const created = (req, res) => {
     })
 }
 
+const updated = (req, res) => {
+  const filter = { id: req.params.id, isDeleted: false }
+  if (!filter.id) return res.status(400).json({ success: false, message: 'Invalid payload', data: null, paginate: null })
+
+  Dapps.get(filter, (err, data) => {
+    if (err) return res.status(500).json({ success: false, message: err, data: null, paginate: null })
+    if (!data || data.isDeleted) return res.status(400).json({ success: false, message: 'Dapp not found', data: null, paginate: null })
+
+    const item = { ...req.body, ipfsHash: req.body.ipfs_hash }
+    Dapps.update({ id: filter.id }, item, (err, data) => {
+      if (err) return res.status(500).json({ status: 500, success: false, message: err, data: null, paginate: null })
+      return res.status(201).json({ success: true, message: 'Dapp updated successfully', data, paginate: null })
+    })
+  })
+}
+
 const deleted = (req, res) => {
   const filter = { id: req.params.id, isDeleted: false }
   if (!filter.id) return res.status(400).json({ success: false, message: 'Invalid payload', data: null, paginate: null })
@@ -87,4 +105,4 @@ const deleted = (req, res) => {
   // }
 }
 
-module.exports = { getAll, getById, created, deleted }
+module.exports = { getAll, getById, created, updated, deleted }
