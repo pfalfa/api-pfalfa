@@ -10,7 +10,14 @@ const getByHash = (req, res) => {
     .then(resp => {
       const { status, error_msg, data } = resp
       if (status === 'failed') return res.status(400).json({ success: false, message: error_msg, data: null, paginate: null })
-      const datas = data.length > 0 ? _.sortBy(data, ['Type', 'Name']) : null
+
+      const dataIpfs = data.map(item => {
+        if (item.Name === '__MACOSX') {
+          item.Type = 3
+        }
+        return item
+      })
+      const datas = data.length > 0 ? _.sortBy(dataIpfs, ['Type', 'Name']) : null
       return res.status(200).json({ success: true, message: 'Ipfs fetched successfully', data: datas, paginate: null })
     })
     .catch(error => {
