@@ -13,9 +13,12 @@ const getById = (req, res) => {
   const filter = { id: req.params.id, isDeleted: false }
   if (!filter.id) return res.status(400).json({ success: false, message: 'Invalid payload', data: null, paginate: null })
 
-  Dapps.get(filter, (err, data) => {
+  Dapps.get(filter, async (err, data) => {
     if (err) return res.status(500).json({ success: false, message: err, data: null, paginate: null })
     if (!data || data.isDeleted) return res.status(400).json({ success: false, message: 'Dapp not found', data: null, paginate: null })
+
+    const dappUploads = data && data.ipfsHash ? await api.get(`ipfs/list/${data.ipfsHash}`).then(resp => resp.data) : []
+    data.dappUploads = dappUploads
     return res.status(200).json({ success: true, message: 'Dapp fetched successfully', data, paginate: null })
   })
 }
