@@ -1,3 +1,4 @@
+const _ = require('lodash')
 const { api } = require('../utils')
 const { Dapps } = require('../models')
 
@@ -17,7 +18,12 @@ const getById = (req, res) => {
     if (err) return res.status(500).json({ success: false, message: err, data: null, paginate: null })
     if (!data || data.isDeleted) return res.status(400).json({ success: false, message: 'Dapp not found', data: null, paginate: null })
 
-    const dappUploads = data && data.ipfsHash ? await api.get(`ipfs/list/${data.ipfsHash}`).then(resp => resp.data) : []
+    const dappUploads =
+      data && data.ipfsHash
+        ? await api.get(`ipfs/list/${data.ipfsHash}`).then(resp => {
+            return resp.data.length > 0 ? _.sortBy(resp.data, ['Type', 'Name']) : null
+          })
+        : []
     data.dappUploads = dappUploads
     return res.status(200).json({ success: true, message: 'Dapp fetched successfully', data, paginate: null })
   })
