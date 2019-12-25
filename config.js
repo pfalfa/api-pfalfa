@@ -9,7 +9,7 @@ module.exports = {
     port: process.env.PORT || 3033,
     loggerFilePath: './logs/access.log',
     host: process.env.HOST || 'localhost',
-    nodeEnv: process.env.NODE_ENV || null,
+    nodeEnv: process.env.NODE_ENV || 'development',
     sessionSecret: process.env.SESSION_SECRET,
     openSslKeyPath: process.env.SSL_KEYPATH || null,
     openSslCertPath: process.env.SSL_CERTPATH || null,

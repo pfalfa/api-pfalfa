@@ -21,7 +21,7 @@ dynamoose.AWS.config.update(config.dynamodb)
 dynamoose.setDefaults({
   create: true,
   prefix: 'pfalfa-',
-  suffix: !config.app.nodeEnv ? '-staging' : '-production',
+  suffix: config.app.nodeEnv === 'development' ? '-staging' : '-production',
 })
 
 /** express server */
