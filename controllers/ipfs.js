@@ -6,7 +6,7 @@ const getByHash = (req, res) => {
   if (!hash) return res.status(400).json({ success: false, message: 'Invalid payload', data: null, paginate: null })
 
   api
-    .get(`ipfs/list/${hash}`)
+    .get(api.host.dev, `ipfs/list/${hash}`)
     .then(resp => {
       const { status, error_msg, data } = resp
       if (status === 'failed') return res.status(400).json({ success: false, message: error_msg, data: null, paginate: null })
