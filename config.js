@@ -19,10 +19,6 @@ module.exports = {
     accessKeyId: process.env.ACCESS_KEY_ID || null,
     secretAccessKey: process.env.SECRET_ACCESS_KEY || null,
   },
-  gundb: {
-    fileName: 'db',
-    host: process.env.GUNDB_PEERS || ['https://pfalfa-ihub.pfalfa.io/gun'],
-  },
   api: {
     ihub: process.env.API_IHUB || 'https://pfalfa-ihub-api.pfalfa.io/api',
     dev: process.env.API_DEV || 'https://staging-pfalfa-api-dev.pfalfa.io',

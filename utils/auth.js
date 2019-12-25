@@ -1,4 +1,4 @@
-const { gun } = require('./gundb')
+const api = require('./api')
 
 module.exports = async (req, res, next) => {
   const { authorization } = req.headers
@@ -6,18 +6,15 @@ module.exports = async (req, res, next) => {
     return res.status(403).json({ success: false, message: 'Authorization header not provided or empty', data: null, paginate: null })
   }
 
-  try {
-    gun.user(authorization).once(data => {
-      if (data) {
-        req.UserAuth = { alias: data.alias, pub: data.pub, epub: data.epub }
-        next()
-      } else {
-        return res
-          .status(403)
-          .json({ success: false, message: 'You do not have enough permission to perform this action', data: null, paginate: null })
-      }
+  api
+    .get(api.host.ihub, `users/${authorization}`)
+    .then(resp => {
+      const { success, message, data } = resp
+      if (!success) return res.status(403).json({ success: false, message, data: null })
+      req.UserAuth = data
+      next()
     })
-  } catch (error) {
-    console.error(error)
-  }
+    .catch(error => {
+      return res.status(500).json({ success: false, message: error.message, data: null })
+    })
 }

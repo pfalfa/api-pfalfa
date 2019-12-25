@@ -69,12 +69,4 @@ async function del(hostApi, endpoint, headerAuth = null) {
     .catch(error => error)
 }
 
-const api = {
-  host,
-  get,
-  post,
-  put,
-  del,
-}
-
-module.exports = api
+module.exports = api = { host, get, post, put, del }

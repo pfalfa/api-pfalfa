@@ -17,7 +17,6 @@
     "express": "^4.17.1",
     "express-rate-limit": "^5.0.0",
     "express-session": "^1.17.0",
-    "gun": "^0.2019.1120",
     "helmet": "^3.21.2",
     "lodash": "^4.17.15",
     "morgan": "^1.9.1",
