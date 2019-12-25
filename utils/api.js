@@ -1,13 +1,14 @@
 const fetch = require('node-fetch')
 const config = require('../config')
 
-const hostApi = config.api.dev
+// const hostApi = config.api.dev
+const host = { ihub: config.api.ihub, dev: config.api.dev }
 const headerOptions = {
   Accept: 'application/json',
   'Content-Type': 'application/json; charset=utf-8',
 }
 
-async function get(endpoint, headerAuth = null) {
+async function get(hostApi, endpoint, headerAuth = null) {
   if (headerAuth) {
     headerOptions.Authorization = headerAuth
   }
@@ -22,7 +23,7 @@ async function get(endpoint, headerAuth = null) {
     .catch(error => error)
 }
 
-async function post(endpoint, payload, headerAuth = null) {
+async function post(hostApi, endpoint, payload, headerAuth = null) {
   if (headerAuth) {
     headerOptions.Authorization = headerAuth
   }
@@ -38,7 +39,7 @@ async function post(endpoint, payload, headerAuth = null) {
     .catch(error => error)
 }
 
-async function put(endpoint, payload, headerAuth = null) {
+async function put(hostApi, endpoint, payload, headerAuth = null) {
   if (headerAuth) {
     headerOptions.Authorization = headerAuth
   }
@@ -54,7 +55,7 @@ async function put(endpoint, payload, headerAuth = null) {
     .catch(error => error)
 }
 
-async function del(endpoint, headerAuth = null) {
+async function del(hostApi, endpoint, headerAuth = null) {
   if (headerAuth) {
     headerOptions.Authorization = headerAuth
   }
@@ -70,6 +71,7 @@ async function del(endpoint, headerAuth = null) {
 }
 
 const api = {
+  host,
   get,
   post,
   put,

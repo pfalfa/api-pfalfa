@@ -7,6 +7,7 @@ const limiter = rateLimit({
 })
 
 module.exports = app => {
-  app.use(`${config.app.mainRoute}/dapps`, limiter, require('./dapps'))
-  app.use(`${config.app.mainRoute}/ipfs`, limiter, require('./ipfs'))
+  app.use(`${config.app.route}/auth`, limiter, require('./auth'))
+  // app.use(`${config.app.route}/dapps`, limiter, require('./dapps'))
+  // app.use(`${config.app.route}/ipfs`, limiter, require('./ipfs'))
 }
