@@ -39,7 +39,7 @@ routes(app)
 
 /** cluster server */
 const server =
-  config.app.modeServer === 'http'
+  !config.app.openSslKeyPath && !config.app.openSslCertPath
     ? http.createServer(app)
     : https.createServer(
         {
@@ -48,7 +48,7 @@ const server =
         },
         app
       )
-if (cluster.isMaster && config.app.modeCluster) {
+if (cluster.isMaster) {
   const cpus = os.cpus().length
   for (let i = 0; i < cpus; i++) {
     cluster.fork()
@@ -57,18 +57,18 @@ if (cluster.isMaster && config.app.modeCluster) {
 } else {
   const port = config.app.port
   server.listen(port, () => {
-    console.log(`Start Express Server on Port ${port} Handled by Process ${process.pid}`)
+    console.log(`Start API Pfalfa on Port ${port} Handled by Process ${process.pid}`)
     return
   })
 
   process.on('SIGINT', () => {
     server.close(err => {
       if (err) {
-        console.error(`Error Express Server : ${err}`)
+        console.error(`Error API Pfalfa : ${err}`)
         process.exit(1)
         return
       }
-      console.log(`Close Express Server on Port ${port} Handled by Process ${process.pid}`)
+      console.log(`Close API Pfalfa on Port ${port} Handled by Process ${process.pid}`)
       process.exit(0)
     })
   })
