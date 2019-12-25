@@ -1,7 +1,6 @@
 const fetch = require('node-fetch')
 const config = require('../config')
 
-// const hostApi = config.api.dev
 const host = { ihub: config.api.ihub, dev: config.api.dev }
 const headerOptions = {
   Accept: 'application/json',

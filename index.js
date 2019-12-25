@@ -1,4 +1,3 @@
-require('dotenv').config()
 const fs = require('fs')
 const os = require('os')
 const cors = require('cors')
@@ -22,7 +21,7 @@ dynamoose.AWS.config.update(config.dynamodb)
 dynamoose.setDefaults({
   create: true,
   prefix: 'pfalfa-',
-  suffix: process.env.NODE_ENV === 'development' ? '-staging' : '-production',
+  suffix: !config.app.nodeEnv ? '-staging' : '-production',
 })
 
 /** express server */
