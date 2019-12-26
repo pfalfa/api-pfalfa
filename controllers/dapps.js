@@ -45,8 +45,9 @@ const created = (req, res) => {
         category,
         apiVersion,
         description,
+        gunDb: null,
         ipLocal: null,
-        status: null,
+        status: 'pending',
         port: payload.port,
         name: metadata.name,
         dappUid: metadata.uid,
@@ -54,7 +55,6 @@ const created = (req, res) => {
         dappDetail: data.items[0],
         logoUrl: logoUrl || null,
         dappCreated: metadata.creationTimestamp,
-        gunDb: `${spec.clusterIP}:${spec.ports[0].port}/gun`,
         ipPublic: spec.loadBalancer && spec.loadBalancer.ingress ? spec.loadBalancer.ingress[0].ip : null,
       }
       const dapps = new Dapps(item)
