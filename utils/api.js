@@ -1,4 +1,6 @@
+const fs = require('fs')
 const fetch = require('node-fetch')
+const FormData = require('form-data')
 const config = require('../config')
 
 const host = { ihub: config.api.ihub, dev: config.api.dev }
@@ -69,4 +71,18 @@ async function del(hostApi, endpoint, headerAuth = null) {
     .catch(error => error)
 }
 
-module.exports = api = { host, get, post, put, del }
+async function upload(hostApi, endpoint, payload, fileName = 'file') {
+  const form = new FormData()
+  form.append(fileName, fs.createReadStream(payload.path))
+
+  return fetch(`${hostApi}/${endpoint}`, {
+    method: 'POST',
+    // credentials: 'same-origin',
+    body: form,
+  })
+    .then(response => response.json())
+    .then(data => data)
+    .catch(error => error)
+}
+
+module.exports = api = { host, get, post, put, del, upload }

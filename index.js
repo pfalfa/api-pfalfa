@@ -57,7 +57,6 @@ if (cluster.isMaster) {
   const port = config.app.port
   server.listen(port, () => {
     console.log(`Start API Pfalfa on Port ${port} Handled by Process ${process.pid}`)
-    return
   })
 
   process.on('SIGINT', () => {

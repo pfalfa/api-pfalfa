@@ -20,7 +20,7 @@ module.exports = {
     secretAccessKey: process.env.SECRET_ACCESS_KEY || null,
   },
   api: {
-    ihub: process.env.API_IHUB || 'https://pfalfa-ihub-api.pfalfa.io/api',
-    dev: process.env.API_DEV || 'https://staging-pfalfa-api-dev.pfalfa.io',
+    dev: process.env.API_DEV || 'http://localhost:8081˝',
+    ihub: process.env.API_IHUB || 'http://localhost:3003/api',
   },
 }
