@@ -19,7 +19,7 @@ const dappsSchema = new Schema(
     apiVersion: { type: String },
     description: { type: String },
     ipfsHash: { type: String },
-    gunDb: { type: String, required: true },
+    gunDb: { type: String },
     isDeleted: { type: Boolean, default: false },
     // isDeleted: { type: String, enum: ['Active', 'Inactive'] },
   },
