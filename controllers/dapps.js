@@ -80,7 +80,7 @@ const updated = (req, res) => {
     if (err) return res.status(500).json({ success: false, message: err, data: null, paginate: null })
     if (!data || data.isDeleted) return res.status(400).json({ success: false, message: 'Dapp not found', data: null, paginate: null })
 
-    const item = { ...req.body, ipfsHash: req.body.ipfs_hash }
+    const item = { ...req.body, ipfsHash: req.body.ipfsHash || null }
     Dapps.update({ id: filter.id }, item, (err, data) => {
       if (err) return res.status(500).json({ status: 500, success: false, message: err, data: null, paginate: null })
       return res.status(201).json({ success: true, message: 'Dapp updated successfully', data, paginate: null })
