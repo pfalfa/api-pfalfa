@@ -33,7 +33,7 @@ const created = (req, res) => {
   const { logoUrl, podName, category, description } = req.body
   if (!podName || !category) return res.status(400).json({ success: false, message: 'Invalid payload', data: null, paginate: null })
 
-  const payload = { podName, port: 80 }
+  const payload = { pod_name: podName, port: 80 }
   api
     .post(api.host.dev, 'dapps/create', payload)
     .then(resp => {
