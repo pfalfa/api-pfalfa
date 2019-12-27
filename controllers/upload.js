@@ -22,8 +22,9 @@ const s3 = (req, res) => {
     Body: fs.readFileSync(val.path),
   })
     .promise()
-    .then(resp => {
-      const data = S3.getSignedUrl('getObject', { Bucket: config.aws.bucketUpload, Key: fileName })
+    .then(() => {
+      const file = S3.getSignedUrl('getObject', { Bucket: config.aws.bucketUpload, Key: fileName })
+      const data = file.substr(0, file.indexOf('AWSAccessKeyId') - 1)
       return res.status(200).json({ success: true, message: 'S3 Uploaded successfully', data, paginate: null })
     })
     .catch(error => {
