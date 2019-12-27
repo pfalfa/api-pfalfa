@@ -21,7 +21,7 @@ const getById = (req, res) => {
     const dappUploads =
       data && data.ipfsHash
         ? await api.get(api.host.dev, `ipfs/list/${data.ipfsHash}`).then(resp => {
-            return resp.data.length > 0 ? _.sortBy(resp.data, ['Type', 'Name']) : null
+            return resp.status === 'success' ? _.sortBy(resp.data, ['Type', 'Name']) : []
           })
         : []
     data.dappUploads = dappUploads
@@ -80,7 +80,7 @@ const updated = (req, res) => {
     if (err) return res.status(500).json({ success: false, message: err, data: null, paginate: null })
     if (!data || data.isDeleted) return res.status(400).json({ success: false, message: 'Dapp not found', data: null, paginate: null })
 
-    const item = { ...req.body, ipfsHash: req.body.ipfsHash || null }
+    const item = { ...req.body, ipfsHash: req.body.ipfsHash }
     Dapps.update({ id: filter.id }, item, (err, data) => {
       if (err) return res.status(500).json({ status: 500, success: false, message: err, data: null, paginate: null })
       return res.status(201).json({ success: true, message: 'Dapp updated successfully', data, paginate: null })
