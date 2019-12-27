@@ -17,7 +17,7 @@ const routes = require('./routes')
 const app = express().set('port', config.app.port)
 
 /** config dynamo db */
-dynamoose.AWS.config.update(config.dynamodb)
+dynamoose.AWS.config.update(config.aws)
 dynamoose.setDefaults({
   create: true,
   prefix: 'pfalfa-',

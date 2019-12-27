@@ -14,8 +14,9 @@ module.exports = {
     openSslKeyPath: process.env.SSL_KEYPATH || null,
     openSslCertPath: process.env.SSL_CERTPATH || null,
   },
-  dynamodb: {
+  aws: {
     region: process.env.REGION || null,
+    bucketUpload: 'pfalfa-upload.pfalfa.io',
     accessKeyId: process.env.ACCESS_KEY_ID || null,
     secretAccessKey: process.env.SECRET_ACCESS_KEY || null,
   },
