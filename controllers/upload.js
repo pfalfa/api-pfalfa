@@ -11,12 +11,13 @@ const s3 = (req, res) => {
 
   const key = Object.keys(req.file)[0]
   const val = req.file[key]
-  const fileName = `${req.UserAuth.pub}-${new Date().getTime()}-${val.name}`
+  const dirName = 'images'
+  const fileName = `${dirName}/${req.UserAuth.pub}-${new Date().getTime()}-${val.name}`
   if (key !== 'file')
     return res.status(400).json({ success: false, message: 'Field must be using "file" name', data: null, paginate: null })
 
   S3.putObject({
-    Key: `dapps/${fileName}`,
+    Key: fileName,
     Bucket: config.aws.bucketUpload,
     Body: fs.readFileSync(val.path),
   })
