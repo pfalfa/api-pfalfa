@@ -15,7 +15,7 @@ module.exports = {
     openSslCertPath: process.env.SSL_CERTPATH || null,
   },
   aws: {
-    region: process.env.REGION || null,
+    region: process.env.REGION || 'ap-southeast-1',
     bucketUpload: 'pfalfa-upload.pfalfa.io',
     accessKeyId: process.env.ACCESS_KEY_ID || null,
     secretAccessKey: process.env.SECRET_ACCESS_KEY || null,

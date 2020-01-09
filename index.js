@@ -3,26 +3,22 @@ const os = require('os')
 const cors = require('cors')
 const http = require('http')
 const https = require('https')
+const AWS = require('aws-sdk')
 const logger = require('morgan')
 const helmet = require('helmet')
 const cluster = require('cluster')
 const express = require('express')
-const dynamoose = require('dynamoose')
 const bodyParser = require('body-parser')
 const compression = require('compression')
 const session = require('express-session')
 
 const config = require('./config')
 const routes = require('./routes')
+const schedulers = require('./schedulers')
 const app = express().set('port', config.app.port)
 
-/** config dynamo db */
-dynamoose.AWS.config.update(config.aws)
-dynamoose.setDefaults({
-  create: true,
-  prefix: 'pfalfa-',
-  suffix: config.app.nodeEnv === 'development' ? '-staging' : '-production',
-})
+/** dynamodb config */
+AWS.config.update(config.aws)
 
 /** express server */
 app.use(cors())
@@ -47,7 +43,8 @@ const server =
         },
         app
       )
-if (cluster.isMaster) {
+
+if (cluster.isMaster && 1 === 2) {
   const cpus = os.cpus().length
   for (let i = 0; i < cpus; i++) {
     cluster.fork()
@@ -56,10 +53,12 @@ if (cluster.isMaster) {
 } else {
   const port = config.app.port
   server.listen(port, () => {
+    schedulers.start()
     console.log(`Start API Pfalfa on Port ${port} Handled by Process ${process.pid}`)
   })
 
   process.on('SIGINT', () => {
+    schedulers.stop()
     server.close(err => {
       if (err) {
         console.error(`Error API Pfalfa : ${err}`)
