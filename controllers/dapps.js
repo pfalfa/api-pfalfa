@@ -5,17 +5,11 @@ const { Dapps } = require('../models')
 
 const getAll = (req, res) => {
   const params = { isDeleted: false, pubkey: req.UserAuth.pub }
+
   Dapps.scan(params, (err, data) => {
     if (err) return res.status(500).json({ success: false, message: err.message, data: null, paginate: null })
 
-    const items =
-      data && data.Items && data.Items.length > 0
-        ? data.Items.map(i => {
-            i.dappDetail = JSON.parse(i.dappDetail)
-            return i
-          })
-        : []
-
+    const items = data && data.Items && data.Items.length > 0 ? data.Items : []
     return res.status(200).json({ success: true, message: 'Dapps fetched successfully', data: items, paginate: null })
   })
 }
@@ -37,7 +31,7 @@ const getById = (req, res) => {
         ? await api.get(api.host.dev, `ipfs/list/${data.ipfsHash}`).then(resp => {
             return resp.status === 'success' ? _.sortBy(resp.data, ['Type', 'Name']) : []
           })
-        : []
+        : null
 
     return res.status(200).json({ success: true, message: 'Dapp fetched successfully', data: item, paginate: null })
   })
