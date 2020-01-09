@@ -1,10 +1,9 @@
-const Gun = require('gun/gun')
+const Gun = require('gun')
 const config = require('../config')
 require('gun/sea')
-require('gun/lib/server')
+require('gun/lib/webrtc')
+// require('gun/lib/server')
 
-// const gun = Gun([config.gundb.host])
-const gun = Gun({ file: config.gundb.fileName, peers: config.gundb.host, axe: false })
-const sea = Gun.SEA
+const gun = Gun({ file: 'db', peers: config.gundb.peers, axe: false })
 
-module.exports = { gun, sea }
+module.exports = gundb = { gun }

@@ -44,7 +44,7 @@ const server =
         app
       )
 
-if (cluster.isMaster && 1 === 2) {
+if (cluster.isMaster) {
   const cpus = os.cpus().length
   for (let i = 0; i < cpus; i++) {
     cluster.fork()

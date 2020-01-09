@@ -14,6 +14,9 @@ module.exports = {
     openSslKeyPath: process.env.SSL_KEYPATH || null,
     openSslCertPath: process.env.SSL_CERTPATH || null,
   },
+  gundb: {
+    peers: ['https://pfalfa-ihub.pfalfa.io/gun'],
+  },
   aws: {
     region: process.env.REGION || 'ap-southeast-1',
     bucketUpload: 'pfalfa-upload.pfalfa.io',
