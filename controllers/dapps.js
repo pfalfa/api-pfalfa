@@ -105,6 +105,7 @@ const updated = (req, res) => {
       item.ipfsHash = data.Attributes.ipfsHash
       item.category = data.Attributes.category
       item.description = data.Attributes.description
+      item.logoUrl = data.Attributes.logoUrl
       if (err) return res.status(500).json({ status: 500, success: false, message: err.message, data: null, paginate: null })
       item.ipfsHash = req.body.ipfsHash
       return res.status(201).json({ success: true, message: 'Dapp updated successfully', data: item, paginate: null })
