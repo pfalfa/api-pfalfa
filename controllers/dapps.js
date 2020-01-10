@@ -94,11 +94,12 @@ const updated = (req, res) => {
       return res.status(400).json({ success: false, message: 'Dapp not found', data: null, paginate: null })
 
     const item = data && data.Item
-    const expUpdate = 'set ipfsHash = :ipfsHash, category = :category, description = :description'
+    const expUpdate = 'set ipfsHash = :ipfsHash, category = :category, description = :description, logoUrl = :logoUrl'
     const attUpdate = {
       ':ipfsHash': ipfsHash ? ipfsHash : item.ipfsHash,
       ':category': category ? category : item.category,
       ':description': description ? description : item.description,
+      ':logoUrl': logoUrl ? logoUrl : item.logoUrl,
     }
     Dapps.put(params, expUpdate, attUpdate, (err, data) => {
       item.ipfsHash = data.Attributes.ipfsHash
