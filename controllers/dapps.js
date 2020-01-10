@@ -83,19 +83,27 @@ const created = (req, res) => {
 
 const updated = (req, res) => {
   const params = { id: req.params.id }
-  const exp = 'isDeleted = :isDeleted'
-  const att = { ':isDeleted': false }
+  const { ipfsHash, category, description } = req.body
   if (!params.id) return res.status(400).json({ success: false, message: 'Invalid payload', data: null, paginate: null })
 
+  const exp = 'isDeleted = :isDeleted'
+  const att = { ':isDeleted': false }
   Dapps.get(params, exp, att, (err, data) => {
     if (err) return res.status(500).json({ success: false, message: err.message, data: null, paginate: null })
     if (util.isObjEmpty(data) || data.Item.isDeleted)
       return res.status(400).json({ success: false, message: 'Dapp not found', data: null, paginate: null })
 
     const item = data && data.Item
-    const exp = 'set ipfsHash = :ipfsHash'
-    const att = { ':ipfsHash': req.body.ipfsHash }
-    Dapps.put(params, exp, att, err => {
+    const expUpdate = 'set ipfsHash = :ipfsHash, category = :category, description = :description'
+    const attUpdate = {
+      ':ipfsHash': ipfsHash ? ipfsHash : item.ipfsHash,
+      ':category': category ? category : item.category,
+      ':description': description ? description : item.description,
+    }
+    Dapps.put(params, expUpdate, attUpdate, (err, data) => {
+      item.ipfsHash = data.Attributes.ipfsHash
+      item.category = data.Attributes.category
+      item.description = data.Attributes.description
       if (err) return res.status(500).json({ status: 500, success: false, message: err.message, data: null, paginate: null })
       item.ipfsHash = req.body.ipfsHash
       return res.status(201).json({ success: true, message: 'Dapp updated successfully', data: item, paginate: null })
